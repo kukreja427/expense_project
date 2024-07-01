@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Tracking App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Daily Check</h1>
+        <h2>Expense Tracker</h2>
+        <form id="sign-in-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit" class="add-expense-btn" style="margin: 10px 10px ;">Sign In</button>
+            <span class="sign-up-link">if you don't have an account, <a href="signup.html">Sign Up</a></span>
+        </form>
+        <div id="error-message" style="color: red;"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const signInForm = document.getElementById("sign-in-form");
+
+            if (signInForm) {
+                signInForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+
+                    const response = await fetch("http://localhost:8000/token", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: new URLSearchParams({
+                            username: email,
+                            password: password,
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem("access_token", result.access_token);
+                        window.location.href = "dashboard.html";
+                    } else {
+                        const errorMessage = document.getElementById("error-message");
+                        errorMessage.textContent = result.detail;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

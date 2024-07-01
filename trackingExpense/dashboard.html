@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tracking App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+            <div id="dropdown-menu" class="dropdown-menu">
+                <a href="dashboard.html">Home</a>
+            </div>
+        </nav>
+        <header>
+            <h1>Good morning,
+                <i class="fa fa-male"></i>
+                <span id="user-name">User</span>
+            </h1>
+        </header>
+        <section class="greeting">
+            <p>New Balance: <span id="new-balance">$0</span></p>
+        </section>
+        <section class="services">
+            <h2>Services</h2>
+            <div class="services-container">
+                <div class="service-card" onclick="automateBill()">
+                    <img src="automatic.webp" alt="Automate Bill">
+                    Automate Bill <span class="right-arrow">&#8594;</span>
+                </div>
+                <div class="service-card" onclick="saveMore()">
+                    <img src="savemore.jpg" alt="Save More">
+                    Save More <span class="right-arrow">&#8594;</span>
+                </div>
+                <div class="service-card" onclick="growYourMoney()">
+                    <img src="savemoney.png" alt="Grow Your Money">
+                    Grow Your Money <span class="right-arrow">&#8594;</span>
+                </div>
+            </div>
+        </section>
+        <section class="expenses">
+            <h2>Expenses</h2>
+            <div class="expenses-container" id="expenses-container">
+                <!-- Dynamic expenses will be inserted here -->
+            </div>
+        </section>
+        <div class="add-btn-container">
+            <button class="add-expense-btn" onclick="addExpense()">Add Expense</button>
+        </div>
+
+        <section class="recent-transactions">
+            <h2>Recent Transactions</h2>
+            <div class="transactions-container" id="transactions-container">
+                <!-- Dynamic transactions will be inserted here -->
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <span class="nav-item"><i class="fa fa-home"><a href="dashboard.html"></a> </i></span>
+            <span class="nav-item">
+                <a href="add_balance.html">
+                    <i class=" fa fa-institution">
+                    </i></a></span>
+            <span class="nav-item"><i class="fa fa-snowflake-o"></i></span>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('http://localhost:8000/users/me', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const userData = await response.json();
+                const userNameElement = document.getElementById("user-name");
+                const newBalanceElement = document.getElementById("new-balance");
+                const expensesContainer = document.getElementById("expenses-container");
+                const transactionsContainer = document.getElementById("transactions-container");
+
+                userNameElement.textContent = userData.username;
+                newBalanceElement.textContent = userData.new_balance;
+
+                userData.expenses.forEach(expense => {
+                    const expenseItem = document.createElement('div');
+                    expenseItem.classList.add('expense-item');
+                    expenseItem.textContent = `${expense.name}:` + "$" + `${expense.amount}`;
+                    expensesContainer.appendChild(expenseItem);
+                });
+
+                userData.transactions.forEach(transaction => {
+                    const transactionItem = document.createElement('div');
+                    transactionItem.classList.add('transaction-item');
+                    transactionItem.textContent = `${transaction.item}: ${transaction.amount}`;
+                    transactionsContainer.appendChild(transactionItem);
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                // window.location.href = "index.html";
+            }
+        });
+
+        function automateBill() {
+            alert("Automate Bill clicked!");
+        }
+
+        function saveMore() {
+            alert("Save More clicked!");
+        }
+
+        function growYourMoney() {
+            alert("Grow Your Money clicked!");
+        }
+
+        function addExpense() {
+            window.location.href = "add_expense.html";
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            if (dropdownMenu.style.display === 'none' || !dropdownMenu.style.display) {
+                dropdownMenu.style.display = 'block';
+            } else {
+                dropdownMenu.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function (event) {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            const menuIcon = document.querySelector('.menu-icon');
+            if (!dropdownMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+
+    </script>
+</body>
+
+</html>

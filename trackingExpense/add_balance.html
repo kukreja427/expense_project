@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Balance - Tracking App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+            <div id="dropdown-menu" class="dropdown-menu">
+                <a href="dashboard.html">Home</a>
+                <a href="add_expense.html">Add Expense</a>
+                <!-- Add more navigation links as needed -->
+            </div>
+        </nav>
+        <header style="margin-top: 20%;">
+            <h1>Add Balance</h1>
+        </header>
+        <section class="add-balance-form">
+            <form id="balanceForm">
+                <div class="form-control">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" min="0" step="0.01" required>
+                </div>
+                <div class="form-control">
+                    <button type="submit" class="add-expense-btn" style="margin: 10px 10px ;">Add Balance</button>
+                    <button type="button" class="add-expense-btn" style="margin: 10px 10px ;"
+                        onclick="cancelForm()">Cancel</button>
+                </div>
+            </form>
+        </section>
+        <nav class="bottom-nav">
+            <span class="nav-item"><a href="dashboard.html"><i class="fa fa-home"></i></a></span>
+            <span class="nav-item"><i class="fa fa-institution"></i></span>
+            <span class="nav-item"><a href="add_expense.html"><i class="fa fa-snowflake-o"></i></a></span>
+        </nav>
+    </div>
+
+    <script>
+        function cancelForm() {
+            // Redirect back to the dashboard
+            window.location.href = "dashboard.html";
+        }
+
+        document.getElementById("balanceForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                amount: parseFloat(document.getElementById("amount").value).toFixed(2)
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8000/users/balance?query=${formData.amount}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                }).catch(error => console.error('Error:', error));
+
+                if (!response.ok) {
+                    throw new Error('Failed to add balance');
+                }
+
+                alert('Balance added successfully!');
+                // Redirect back to the dashboard
+                window.location.href = "dashboard.html";
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            if (dropdownMenu.style.display === 'none' || !dropdownMenu.style.display) {
+                dropdownMenu.style.display = 'block';
+            } else {
+                dropdownMenu.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function (event) {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            const menuIcon = document.querySelector('.menu-icon');
+            if (!dropdownMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

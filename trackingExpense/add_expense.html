@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Expense - Tracking App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+            <div id="dropdown-menu" class="dropdown-menu">
+                <a href="dashboard.html">Home</a>
+            </div>
+        </nav>
+        <header>
+            <h1>Add New Expense</h1>
+        </header>
+        <section class="add-expense-form">
+            <form id="expenseForm">
+                <div class="form-control">
+                    <label for="expenseName">Expense Name:</label>
+                    <input type="text" id="expenseName" name="expenseName" required>
+                </div>
+                <div class="form-control">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" min="0" step="0.01" required>
+                </div>
+                <div class="form-control">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Food">Food</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-control">
+                    <button type="submit" class="add-expense-btn" style="margin: 10px 10px ;">Save</button>
+                    <button type="button" class="add-expense-btn" style="margin: 10px 10px ;"
+                        onclick="cancelForm()">Cancel</button>
+                </div>
+            </form>
+        </section>
+        <nav class="bottom-nav">
+            <span class="nav-item"><i class="fa fa-home"></i></span>
+            <span class="nav-item">
+                <a href="add_balance.html">
+                    <i class=" fa fa-institution">
+                    </i></a></span>
+            <span class="nav-item"><i class="fa fa-snowflake-o"></i></span>
+        </nav>
+    </div>
+
+    <script>
+        function cancelForm() {
+            // Redirect back to the dashboard
+            window.location.href = "dashboard.html";
+        }
+
+        document.getElementById("expenseForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const formData = {
+                name: document.getElementById("expenseName").value,
+                amount: parseFloat(document.getElementById("amount").value),
+                category: document.getElementById("category").value,
+                date: document.getElementById("date").value
+            };
+
+            try {
+                const response = await fetch('http://localhost:8000/expenses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to add expense');
+                }
+
+                alert('Expense added successfully!');
+                // Redirect back to the dashboard
+                window.location.href = "dashboard.html";
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            if (dropdownMenu.style.display === 'none' || !dropdownMenu.style.display) {
+                dropdownMenu.style.display = 'block';
+            } else {
+                dropdownMenu.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function (event) {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            const menuIcon = document.querySelector('.menu-icon');
+            if (!dropdownMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

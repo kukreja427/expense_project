@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense - Tracking App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="menu-icon" onclick="toggleDropdown()">☰</div>
+            <div id="dropdown-menu" class="dropdown-menu">
+                <a href="dashboard.html">Home</a>
+            </div>
+        </nav>
+        <div class="expenses">
+            <h2>Expenses</h2>
+            <div class="expense-summary">
+                <div class="expense-container">
+                    <div class="">
+                        Shopping
+                    </div>
+                    <div class="">
+                        240
+                    </div>
+                </div>
+                <div class="expense-container">
+                    <div class="">
+                        Groceries
+                    </div>
+                    <div class="">
+                        65
+                    </div>
+                </div>
+                <div class="expense-container">
+                    <div class="">
+                        Netflix
+                    </div>
+                    <div class="">
+                        101
+                    </div>
+                </div>
+
+            </div>
+            <div class="recent-transactions">
+                <h3>Recent Transactions</h3>
+                <div class="transaction-card">
+                    <img src="https://img.etimg.com/thumb/width-640,height-480,imgsize-17376,resizemode-75,msid-94945321/news/international/us/netflix-launches-new-profile-transfer-feature-details-here.jpg"
+                        alt="Netflix" />
+                    Netflix Zone <span class="right-arrow">&#8594;</span> $65
+                </div>
+                <div class="transaction-card">
+                    <img
+                        src="https://mir-s3-cdn-cf.behance.net/projects/404/45a458153982383.Y3JvcCw4NjQsNjc1LDAsOTQ.png" />
+                    Tim Hortons <span class="right-arrow">&#8594;</span> $23
+                </div>
+                <div class="transaction-card">
+                    <img src="" />
+                    Presto <span class="right-arrow">&#8594;</span> $10
+                </div>
+            </div>
+        </div>
+        <nav class="bottom-nav">
+            <span class="nav-item" onclick="fun()"><i class="fa fa-home"></i></span>
+            <span class="nav-item">
+                <a href="add_balance.html">
+                    <i class=" fa fa-institution">
+                    </i></a></span>
+            <span class="nav-item"><i class="fa fa-snowflake-o"></i></span>
+        </nav>
+
+        <script src="script.js"></script>
+</body>
+
+<script>
+    function fun() {
+        window.location.href = "dashboard.html";
+    }
+
+    function toggleDropdown() {
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        if (dropdownMenu.style.display === 'none' || !dropdownMenu.style.display) {
+            dropdownMenu.style.display = 'block';
+        } else {
+            dropdownMenu.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const menuIcon = document.querySelector('.menu-icon');
+        if (!dropdownMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+            dropdownMenu.style.display = 'none';
+        }
+    });
+
+</script>
+
+</html>
