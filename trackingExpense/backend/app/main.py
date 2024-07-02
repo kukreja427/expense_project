@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 # MongoDB connection settings
-MONGO_URL = "mongodb+srv://kajalkk2209:kajalkk2209@cluster0.olgk3un.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+MONGO_URL = "mongodb+srv://kajalkk2209:oRpqjnFdRqRxfUYa@cluster0.olgk3un.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 DATABASE = "expense_tracker_db"
 COLLECTION_USERS = "users"
 COLLECTION_EXPENSES = "expenses"
