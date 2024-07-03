@@ -45,10 +45,23 @@
         </section>
         <section class="expenses">
             <h2>Expenses</h2>
-            <div class="expenses-container" id="expenses-container">
-                <!-- Dynamic expenses will be inserted here -->
+            <div class="expenses-container">
+                <table id="expenses-table">
+                    <thead>
+                        <tr>
+                            <th>Expense Name</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenses-table-body">
+                        <!-- Dynamic expenses will be inserted here -->
+                    </tbody>
+                </table>
             </div>
         </section>
+
         <div class="add-btn-container">
             <button class="add-expense-btn" onclick="addExpense()">Add Expense</button>
         </div>
@@ -93,11 +106,28 @@
                 userNameElement.textContent = userData.username;
                 newBalanceElement.textContent = userData.new_balance;
 
+                const expensesTableBody = document.getElementById("expenses-table-body");
+
                 userData.expenses.forEach(expense => {
-                    const expenseItem = document.createElement('div');
-                    expenseItem.classList.add('expense-item');
-                    expenseItem.textContent = `${expense.name}:` + "$" + `${expense.amount}`;
-                    expensesContainer.appendChild(expenseItem);
+                    const expenseRow = document.createElement('tr');
+
+                    const expenseNameCell = document.createElement('td');
+                    expenseNameCell.textContent = expense.name;
+                    expenseRow.appendChild(expenseNameCell);
+
+                    const amountCell = document.createElement('td');
+                    amountCell.textContent = `$${expense.amount.toFixed(2)}`; // Format amount as currency
+                    expenseRow.appendChild(amountCell);
+
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = expense.category;
+                    expenseRow.appendChild(categoryCell);
+
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = new Date(expense.date).toLocaleDateString(); // Format date
+                    expenseRow.appendChild(dateCell);
+
+                    expensesTableBody.appendChild(expenseRow);
                 });
 
                 userData.transactions.forEach(transaction => {
