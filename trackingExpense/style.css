@@ -277,3 +277,22 @@ i {
 .add-balance-form {
     margin-top: 10%;
 }
+
+#expenses-table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#expenses-table th,
+#expenses-table td {
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: center;
+    color: white;
+}
+
+#expenses-table th {
+    background-color: black;
+    color: white;
+}
