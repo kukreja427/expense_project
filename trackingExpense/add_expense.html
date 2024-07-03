@@ -75,7 +75,7 @@
                 name: document.getElementById("expenseName").value,
                 amount: parseFloat(document.getElementById("amount").value),
                 category: document.getElementById("category").value,
-                date: document.getElementById("date").value
+                date: new Date(document.getElementById("date").value)
             };
 
             try {
